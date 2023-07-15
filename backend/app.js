@@ -7,8 +7,10 @@ const app = express();
 const sequelize = require("./util/database");
 
 const userRoutes = require("./routes/user");
+const chatRoutes = require("./routes/chat");
 
 const User = require("./models/user");
+const Chat = require("./models/chat-db");
 
 app.use(
   cors({
@@ -19,9 +21,10 @@ app.use(
 app.use(express.json());
 
 app.use(userRoutes);
+app.use(chatRoutes);
 
-// User.hasMany(Expense);
-// Expense.belongsTo(User);
+User.hasMany(Chat);
+Chat.belongsTo(User);
 
 // User.hasMany(Order);
 // Order.belongsTo(User);

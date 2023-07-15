@@ -1,5 +1,5 @@
 // const baseURL = "http://65.2.29.156:4000";
-const baseURL = "http://65.2.29.156";
+const baseURL = "http://localhost:4000";
 
 const signUpButton = document.getElementById("signUp");
 const signInButton = document.getElementById("signIn");
@@ -30,6 +30,7 @@ async function signUpUser(e) {
   var signUpObj = {
     name: document.getElementById("signUpName").value,
     email: document.getElementById("signUpEmail").value,
+    phone: document.getElementById("signUpPhone").value,
     password: document.getElementById("singUpPassword").value,
   };
 

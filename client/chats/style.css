@@ -1,0 +1,18 @@
+
+body{
+    background-color: #190d30;
+}
+.main{
+    border-radius: 10px;
+}
+
+.chat{
+    height: 60vh;
+    overflow-y: scroll;
+    
+}
+
+
+.online-user{
+    border-bottom: 2px solid black;
+}

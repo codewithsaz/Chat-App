@@ -58,7 +58,7 @@ async function signInUser(e) {
   try {
     const res = await axios.post(baseURL + "/user/login", loginObj);
     localStorage.setItem("token", res.data.token);
-    window.location.href = "./dashboard/dashboard.html";
+    window.location.href = "./chats/chat.html";
   } catch (err) {
     // console.log(JSON.stringify(err.response.data.message));
     document.getElementById(

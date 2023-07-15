@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login-SignUp</title>
+    <link rel="stylesheet" href="./style.css">
+    <!-- <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#" id="signUpForm">
+                <h1>Create Account</h1>
+                <!-- <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email for registration</span> -->
+                <input type="text" class="form-control my-2" id="signUpName" placeholder="Name" required >
+                <input type="email" class="form-control my-2" id="signUpEmail" placeholder="Email" required>
+                <input type="tel" class="form-control my-2" id="signUpPhone" placeholder="Phone" required>
+                <input type="password" class="form-control my-2" id="singUpPassword" placeholder="Password" required>
+                <p class="errorMessenger" id="signUpErrorMessenger"></p>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="#" id="signInForm">
+                <h1>Sign in</h1>
+                <!-- <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>             
+                </div>
+                <span>or use your account</span> -->
+                <input type="email" class="form-control my-2" id="signInEmail" placeholder="Email" required>
+                <input type="password" class="form-control my-2" id="signInPassword" placeholder="Password" required>
+                <p class="errorMessenger" id="loginErrorMessenger"></p>
+                <a href="#" data-toggle="modal" data-target="#forgotPasswordModal">Forgot Your Password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+            </form>
+        </div>
+        <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password?</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">X</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="forgotPasswordForm">
+                    <div class="form-group ">
+                      <label for="email">Enter your email</label>
+                      <input type="email" class="col-xs-4 form-control" id="email-password-reset" placeholder="Enter your email" required>
+                      <p style="color: blue;" id="resetResponseMessenger"></p>
+                    </div>
+                    <button type="submit" class="btn btn-primary" >Submit</button>
+                    
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="../resources/jQuery/jquery-3.6.0.js"></script>
+      <script src="../resources/bootstrap/js/bootstrap.js"></script>
+      <script src="../resources/axios/axios.min.js"></script> -->
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      <script src="./script.js"></script>
+      
+</body>
+</html>

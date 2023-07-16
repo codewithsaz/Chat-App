@@ -20,3 +20,17 @@ exports.addChatToDB = async (req, res) => {
       .json({ success: false, message: "Unable to add chat to DataBase" });
   }
 };
+
+exports.getChatsFromDb = async (req, res) => {
+  try {
+    const chats = await ChatDB.findAll();
+    // console.log(chats);
+    res.status(200).json({
+      succes: true,
+      chats: chats,
+    });
+    res;
+  } catch (err) {
+    console.log(err);
+  }
+};

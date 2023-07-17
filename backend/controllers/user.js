@@ -63,6 +63,8 @@ exports.verifyUser = (req, res) => {
         if (result)
           res.status(200).json({
             success: true,
+            p3245uouhdosuhgf: user[0].id,
+            sdthhtxyd436: user[0].name,
             message: "Login Successfull",
             token: generateAccessToken(
               user[0].id,

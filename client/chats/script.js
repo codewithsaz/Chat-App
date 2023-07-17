@@ -1,5 +1,14 @@
 const baseURL = "http://localhost:4000";
 let token = localStorage.getItem("token");
+userCred = JSON.parse(localStorage.getItem("Harmonious"));
+let userID = userCred.id;
+let userName = userCred.name;
+// import io from "socket.io-client";
+const socket = io.connect("http://localhost:4040");
+
+// const socket = io();
+const room = "Abcd@1234";
+socket.emit("join_room", room);
 
 const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
@@ -30,6 +39,7 @@ msgerForm.addEventListener("submit", async (event) => {
   if (!msgText) return;
 
   const messageObj = {
+    name: userName,
     message: msgText,
   };
   try {
@@ -41,16 +51,15 @@ msgerForm.addEventListener("submit", async (event) => {
         headers: { Authorization: token },
       }
     );
-    console.log(res.data.success, res.data.chat);
-
-    appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
+    sendMsgRT(messageObj, room);
+    appendMessage(res.data.chat.name, PERSON_IMG, "right", msgText);
     msgerInput.value = "";
   } catch (err) {
     console.log(err);
     window.alert("Database Error");
   }
 
-  botResponse();
+  // botResponse();
 });
 
 function appendMessage(name, img, side, text) {
@@ -100,7 +109,7 @@ function random(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-setInterval(getChatsFromDb, 5000);
+// setInterval(getChatsFromDb, 5000);
 
 async function getChatsFromDb() {
   try {
@@ -108,13 +117,14 @@ async function getChatsFromDb() {
       headers: { Authorization: token },
     });
     let chats = res.data.chats;
-    console.log(res.data.success, chats, chats.length);
+    // console.log(res.data.success, chats, chats.length);
 
     chats.forEach((chat) => {
       // console.log(
       //   `Name: ${chat.name}\n Message: ${chat.message} \n user: ${chat.userId}`
       // );
-      if (chat.userId === 1)
+      // console.log("userId  ", userID);
+      if (chat.userId == userID)
         appendMessage(chat.name, PERSON_IMG, "right", chat.message);
       else appendMessage(chat.name, PERSON_IMG, "left", chat.message);
     });
@@ -123,3 +133,13 @@ async function getChatsFromDb() {
     window.alert("Database Error");
   }
 }
+
+async function sendMsgRT(message, room) {
+  await socket.emit("send_message", { message, room });
+}
+
+socket.on("receive_message", (data) => {
+  // setMessageReceived(data.message);
+  appendMessage(data.message.name, PERSON_IMG, "left", data.message.message);
+  console.log(data.message.message);
+});

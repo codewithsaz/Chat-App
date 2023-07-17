@@ -57,6 +57,13 @@ async function signInUser(e) {
 
   try {
     const res = await axios.post(baseURL + "/user/login", loginObj);
+    localStorage.setItem(
+      "Harmonious",
+      JSON.stringify({
+        id: res.data.p3245uouhdosuhgf,
+        name: res.data.sdthhtxyd436,
+      })
+    );
     localStorage.setItem("token", res.data.token);
     window.location.href = "./chats/chat.html";
   } catch (err) {

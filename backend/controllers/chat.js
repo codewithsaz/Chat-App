@@ -1,4 +1,4 @@
-const ChatDB = require("../models/chat-db");
+const ChatDB = require("../models/Chats");
 
 exports.addChatToDB = async (req, res) => {
   const message = req.body.message;

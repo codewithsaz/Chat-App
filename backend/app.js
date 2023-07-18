@@ -9,8 +9,8 @@ const sequelize = require("./util/database");
 const userRoutes = require("./routes/user");
 const chatRoutes = require("./routes/chat");
 
-const User = require("./models/user");
-const Chat = require("./models/chat-db");
+const User = require("./models/User");
+const Chat = require("./models/Chats");
 
 app.use(
   cors({

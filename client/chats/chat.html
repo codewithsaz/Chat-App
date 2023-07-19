@@ -14,6 +14,13 @@
       href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -24,109 +31,139 @@
             src="https://images.unsplash.com/photo-1611903708839-31b28b003935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
             alt="User-Avatar"
           />
+          <span id="user-info-username"></span>
           <div class="user-info-menu">
-            <span>#</span>
-            <span>#</span>
-            <span>#</span>
-            <span>#</span>
+            <!-- <a href="#" data-toggle="modal" data-target="#addNewGroupModal"
+              ><i class="fa-solid fa-plus fa-bounce"></i></i
+            ></a> -->
+            <button type="button" class="btn btn-primary rounded-5" data-toggle="modal" data-target="#createGroupModal">
+              <i class="fa-solid fa-plus"></i>
+            </button>
           </div>
         </div>
         <div class="people-groups">
-          <div class="people-group-info">
-            <img
+          <!-- <div class="people-group-info-wrapper active">
+
+            <div class="people-group-info">
+              <img
               class="people-group-info-img"
               src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=749&q=80"
               alt="people-group"
-            />
-            <div class="people-group-info-text">
-              <div class="people-group-info-title">Sharpner Backend</div>
-              <div class="people-group-info-time">
-                <span>11:45am</span>
+              />
+              <div class="people-group-info-text">
+                <div class="people-group-info-title">Sharpner Backend</div>
+               
               </div>
             </div>
-          </div>
-          <div class="people-group-info active">
-            <img
-              class="people-group-info-img"
-              src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=749&q=80"
-              alt="people-group"
-            />
-            <div class="people-group-info-text">
-              <div class="people-group-info-title">Sharpner Backend</div>
-              <div class="people-group-info-time">
-                <span>11:45am</span>
-              </div>
-            </div>
-          </div>
+          </div> -->
+          
         </div>
       </section>
-      <section class="msger">
-        <header class="msger-header">
-          <div class="msger-header-title">
-            <i class="fas fa-comment-alt"></i> Sharpner Backend
-          </div>
-          <div class="msger-header-options">
-            <span><i class="fas fa-cog"></i></span>
-          </div>
-        </header>
-
-        <main class="msger-chat">
+      <div class="msger-wrapper">
+        <section class="msger">
+          
+          <!-- <span id="no-chats-selected">No chats selected</span> -->
+          <header class="msger-header">
+            <div class="msger-header-title">
+              <img
+              class="people-group-info-img"
+              src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=749&q=80"
+              alt="people-group"
+              /></i> Sharpner Backend
+            </div>
+            <div class="msger-header-options">
+              <span><i class="fa-solid fa-user-plus"></i></span>
+            </div>
+          </header>
+          
+          <main class="msger-chat">
           <!-- <div class="msg left-msg">
             <div
-              class="msg-img"
-              style="
-                background-image: url(https://image.flaticon.com/icons/svg/327/327779.svg);
-              "
+            class="msg-img"
+            style="
+            background-image: url(https://image.flaticon.com/icons/svg/327/327779.svg);
+            "
             ></div>
-
+            
             <div class="msg-bubble">
               <div class="msg-info">
                 <div class="msg-info-name">BOT</div>
                 <div class="msg-info-time">12:45</div>
               </div>
-
+              
               <div class="msg-text">
                 Hi, welcome to SimpleChat! Go ahead and send me a message. 😄
               </div>
             </div>
           </div>
-
+          
           <div class="msg right-msg">
             <div
-              class="msg-img"
-              style="
-                background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg);
-              "
+            class="msg-img"
+            style="
+            background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg);
+            "
             ></div>
-
+            
             <div class="msg-bubble">
               <div class="msg-info">
                 <div class="msg-info-name">Sajad</div>
                 <div class="msg-info-time">12:46</div>
               </div>
-
+              
               <div class="msg-text">
                 You can change your name in JS section!
               </div>
             </div>
           </div> -->
         </main>
-
+        
         <form class="msger-inputarea">
           <input
-            type="text"
-            class="msger-input"
-            placeholder="Enter your message..."
+          type="text"
+          class="msger-input"
+          placeholder="Enter your message..."
           />
           <button type="submit" class="msger-send-btn">Send</button>
         </form>
       </section>
+    </div>
+      
+    <div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createGroupModalLabel">Create Group</h5>
+            <button type="button" class="close btn btn-warning" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="createGroupForm">
+              <div class="form-group">
+                <label for="groupName">Group Name</label>
+                <input type="text" class="form-control" id="groupName" name="groupName" required>
+              </div>
+              <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" class="form-control" id="imageUrl" name="imageUrl" required>
+              </div>
+              <div class="form-group">
+                <label for="users">Users</label>
+                <div id="userList"></div>
+              </div>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
     <script
       src="https://cdn.socket.io/4.6.0/socket.io.min.js"
       integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
       crossorigin="anonymous"
     ></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

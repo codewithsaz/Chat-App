@@ -95,6 +95,16 @@ exports.isPremiumUser = (req, res) => {
   }
 };
 
+exports.getAllUser = async (req, res) => {
+  try {
+    const users = await User.findAll({});
+    // console.log(users);
+    res.status(201).json({ users: users });
+  } catch (err) {
+    res.status(201).json({ isValid: false });
+  }
+};
+
 // exports.updatePassword = async (req, res) => {
 //   const email = req.body.email;
 //   const password = req.body.password;

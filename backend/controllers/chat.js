@@ -2,11 +2,13 @@ const ChatDB = require("../models/Chats");
 
 exports.addChatToDB = async (req, res) => {
   const message = req.body.message;
+  const roomID = req.body.roomID;
   // console.log(message, req.user);
   try {
     await req.user.createChatDb({
       name: req.user.name,
       message: message,
+      RoomId: roomID,
     });
     res.status(200).json({
       succes: true,
@@ -22,8 +24,11 @@ exports.addChatToDB = async (req, res) => {
 };
 
 exports.getChatsFromDb = async (req, res) => {
+  // console.log(req.params);
   try {
-    const chats = await ChatDB.findAll();
+    const chats = await ChatDB.findAll({
+      where: { RoomId: req.params.groupID },
+    });
     // console.log(chats);
     res.status(200).json({
       succes: true,

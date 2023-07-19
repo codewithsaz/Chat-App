@@ -8,9 +8,11 @@ const sequelize = require("./util/database");
 
 const userRoutes = require("./routes/user");
 const chatRoutes = require("./routes/chat");
+const roomRoutes = require("./routes/room");
 
 const User = require("./models/User");
 const Chat = require("./models/Chats");
+const Room = require("./models/Room");
 
 app.use(
   cors({
@@ -21,7 +23,14 @@ app.use(
 app.use(express.json());
 
 app.use(userRoutes);
+app.use(roomRoutes);
 app.use(chatRoutes);
+
+User.belongsToMany(Room, { through: "UserRoom" });
+Room.belongsToMany(User, { through: "UserRoom" });
+
+Room.hasMany(Chat);
+Chat.belongsTo(Room);
 
 User.hasMany(Chat);
 Chat.belongsTo(User);
@@ -36,8 +45,8 @@ Chat.belongsTo(User);
 // ReportGenerated.belongsTo(User);
 
 sequelize
-  .sync()
-  // .sync({ force: true })
+  // .sync()
+  .sync({ force: false })
   .then((result) => {
     app.listen(process.env.PORT || 4000);
   })

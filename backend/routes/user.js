@@ -8,6 +8,8 @@ router.post("/user/signup", userController.addUser);
 
 router.post("/user/login", userController.verifyUser);
 
+router.get("/user/all", authenticator.authenticate, userController.getAllUser);
+
 // router.post("/user/updatePassword", userController.updatePassword);
 
 // router.get(

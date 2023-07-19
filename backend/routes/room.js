@@ -2,19 +2,15 @@ const express = require("express");
 
 const router = express.Router();
 
-const chatController = require("../controllers/chat");
+const roomController = require("../controllers/room");
 const authenticator = require("../middlewares/authenticator");
 
-router.get(
-  "/chat/get/:groupID",
-  authenticator.authenticate,
-  chatController.getChatsFromDb
-);
+router.get("/group/get", authenticator.authenticate, roomController.getRooms);
 
 router.post(
-  "/chat/add",
+  "/group/add",
   authenticator.authenticate,
-  chatController.addChatToDB
+  roomController.createRoom
 );
 
 module.exports = router;

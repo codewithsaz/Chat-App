@@ -13,4 +13,16 @@ router.post(
   roomController.createRoom
 );
 
+router.post(
+  "/group/addUser",
+  authenticator.authenticate,
+  roomController.addUserToRoom
+);
+
+router.delete(
+  "/group/deleteUser",
+  authenticator.authenticate,
+  roomController.deleteUserFromRoom
+);
+
 module.exports = router;

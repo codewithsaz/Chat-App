@@ -13,6 +13,7 @@ const roomRoutes = require("./routes/room");
 const User = require("./models/User");
 const Chat = require("./models/Chats");
 const Room = require("./models/Room");
+const UserRoom = require("./models/UserRoom");
 
 app.use(
   cors({
@@ -35,14 +36,8 @@ Chat.belongsTo(Room);
 User.hasMany(Chat);
 Chat.belongsTo(User);
 
-// User.hasMany(Order);
-// Order.belongsTo(User);
-
-// User.hasMany(ForgotPasswordRequest);
-// ForgotPasswordRequest.belongsTo(User);
-
-// User.hasMany(ReportGenerated);
-// ReportGenerated.belongsTo(User);
+UserRoom.belongsTo(User);
+UserRoom.belongsTo(Room);
 
 sequelize
   // .sync()

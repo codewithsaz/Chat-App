@@ -10,7 +10,7 @@ const userRoutes = require("./routes/user");
 const chatRoutes = require("./routes/chat");
 const roomRoutes = require("./routes/room");
 
-const User = require("./models/User");
+const User = require("./models/Users");
 const Chat = require("./models/Chats");
 const Room = require("./models/Room");
 const UserRoom = require("./models/UserRoom");

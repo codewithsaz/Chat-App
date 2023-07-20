@@ -3,6 +3,7 @@ let token = localStorage.getItem("token");
 userCred = JSON.parse(localStorage.getItem("Harmonious"));
 let userID = userCred.id;
 let userName = userCred.name;
+const availableUser = [];
 // import io from "socket.io-client";
 const socket = io.connect("http://localhost:4040");
 
@@ -13,33 +14,15 @@ const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
 const msgerChat = get(".msger-chat");
 const msgerHeader = get(".msger-header");
+const msgerHeaderTitle = get(".msger-header-title");
 // const msgerChatWindow = get(".msger-chat");
 const grpList = get(".people-groups");
 
-const BOT_MSGS = [
-  "Hi, how are you?",
-  "Ohh... I can't understand what you trying to say. Sorry!",
-  "I like to play games... But I don't know how to play!",
-  "Sorry if my answers are not relevant. :))",
-  "I feel sleepy! :(",
-];
-
-// Icons made by Freepik from www.flaticon.com
 const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
 const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
-const BOT_NAME = "BOT";
-const PERSON_NAME = "Sajad";
-
 window.addEventListener("DOMContentLoaded", () => {
   getUserFromDb();
   getGroupsFromDb();
-  // getChatsFromDb();
-  // for (let i = 0; i < 15; i++) {
-  //   renderGroupList(
-  //     `Sharpner -${i}`,
-  //     "https://images.unsplash.com/photo-1689611947724-c02161745093?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-  //   );
-  // }
 });
 
 document.getElementById("user-info-username").innerText = userName;
@@ -69,22 +52,31 @@ function renderChatWindow(grpName, grpImg, grpID) {
   room = grpID;
   socket.emit("join_room", room);
   //   Simple solution for small apps
-  const chatHeaderHTML = `
-  <div class="msger-header-title">
-    <img
+  const chatHeaderHTML = `<img
     class="people-group-info-img"
     src=${grpImg}
     alt="people-group"
     /> ${grpName}
-  </div>
-  <div class="msger-header-options">
-    <span><i class="fa-solid fa-user-plus"></i></span>
-  </div>
+  
   `;
+  console.log(grpName, grpID, grpImg);
+  const msgerHeaderOptions = document.createElement("div");
+  msgerHeaderOptions.className = "msger-header-options";
+  const spanOptionElement = document.createElement("span");
+  spanOptionElement.setAttribute("data-group-id", grpID);
+  spanOptionElement.addEventListener("click", (event) =>
+    showAddUserModal(event, grpID)
+  );
+  spanOptionElement.innerHTML = `<i class="fa-solid fa-user-plus"></i>`;
+  msgerHeaderOptions.append(spanOptionElement);
+
   msgerChat.innerHTML = "";
   msgerForm.setAttribute("data-group-id", grpID);
-  msgerHeader.innerHTML = chatHeaderHTML;
+  msgerHeaderTitle.innerHTML = chatHeaderHTML;
+  msgerHeader.innerHTML = "";
+  msgerHeader.append(msgerHeaderTitle, msgerHeaderOptions);
   getChatsFromDb(grpID);
+  renderGroupInfo(grpName, grpImg, grpID);
 }
 msgerForm.addEventListener("submit", (event) => sendMsgToDB(event));
 
@@ -112,6 +104,175 @@ function appendMessage(groupID, name, img, side, time, text) {
   if (grpID === groupID) {
     msgerChat.insertAdjacentHTML("beforeend", msgHTML);
     msgerChat.scrollTop += 500;
+  }
+}
+
+function renderGroupInfo(grpname, grpImg, grpID) {
+  const grpInfoDetails = document.getElementById("group-info-details");
+  grpInfoDetails.style.visibility = "visible";
+  const groupIcon = document.getElementById("group-icon");
+  const groupName = document.getElementById("group-name");
+
+  groupIcon.innerHTML = `<img
+  class=".img-fluid. w-75 rounded-4 object-fit-cover"
+  src=${grpImg}
+  alt="people-group"
+  />`;
+
+  groupName.innerText = grpname;
+  renderGroupUserList(grpID);
+}
+
+async function renderGroupUserList(groupID) {
+  try {
+    const res = await axios.get(baseURL + "/group/" + groupID + "/users", {
+      headers: { Authorization: token },
+    });
+    console.log(res.data);
+    const grpuserlist = res.data;
+    const grpUserListUL = document.getElementById("group-user-list-ul");
+    grpUserListUL.className = "list-group p-0 m-0";
+    grpUserListUL.innerHTML = "";
+    grpuserlist.forEach((user) => {
+      const userlielem = document.createElement("li");
+      userlielem.className =
+        "d-flex justify-content-between align-items-center p-1";
+
+      const userName = document.createElement("div");
+      userName.innerText = user.user.name;
+
+      const userAction = document.createElement("div");
+      const adminBtn = document.createElement("button");
+      adminBtn.className = "btn btn-sm btn-primary me-2";
+      adminBtn.textContent = "Admin";
+      adminBtn.setAttribute("data-user-id", user.user.id);
+      adminBtn.setAttribute("data-group-id", groupID);
+      adminBtn.addEventListener("click", (event) => makeUserAdmin(event));
+
+      const deleteUserBtn = document.createElement("button");
+      deleteUserBtn.className = "btn btn-sm btn-warning";
+      deleteUserBtn.textContent = "Delete";
+      deleteUserBtn.setAttribute("data-user-id", user.user.id);
+      deleteUserBtn.setAttribute("data-group-id", groupID);
+      deleteUserBtn.addEventListener("click", (event) =>
+        deleteUserFromGroup(event)
+      );
+
+      if (user.user.id !== userID) {
+        if (!user.admin) {
+          userAction.append(adminBtn, deleteUserBtn);
+        } else {
+          userAction.append(deleteUserBtn);
+        }
+
+        // userAction.appendChild(adminBtn, deleteUserBtn);
+        userlielem.append(userName, userAction);
+      } else {
+        userlielem.append(userName);
+      }
+      console.log(user.admin);
+
+      grpUserListUL.appendChild(userlielem);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function makeUserAdmin(event) {
+  const buttonEle = event.target;
+  const groupID = buttonEle.dataset.groupId;
+  const userId = buttonEle.dataset.userId;
+
+  try {
+    const res = await axios.get(
+      baseURL + `/group/${groupID}/makeAdmin/${userId}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    if (res.data.success) renderGroupUserList(groupID);
+  } catch (err) {
+    window.alert("Cant make user admin");
+  }
+}
+
+async function deleteUserFromGroup(event) {
+  const buttonEle = event.target;
+  const groupID = buttonEle.dataset.groupId;
+  const userId = buttonEle.dataset.userId;
+
+  try {
+    const res = await axios.delete(
+      baseURL + `/group/${groupID}/deleteUser/${userId}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    if (res.data.success) renderGroupUserList(groupID);
+  } catch (err) {
+    window.alert("Cant delete user from group");
+  }
+}
+
+function showAddUserModal(event, groupID) {
+  const buttonEle = event.target;
+  // const groupID = buttonEle.dataset.groupId;
+
+  console.log("showUserModal  ", groupID);
+  // const userId = buttonEle.dataset.userId;
+
+  const userList = document.getElementById("userListAddGroup");
+
+  // Clear any previous list items
+  userList.innerHTML = "";
+
+  // Create and append list items for each available user
+  availableUser.forEach((user) => {
+    console.log(user.name, user.id);
+    if (user.id !== userID) {
+      const li = document.createElement("li");
+      li.classList.add("list-group-item");
+
+      // User name
+      const userNameElement = document.createElement("span");
+      userNameElement.textContent = user.name;
+      li.appendChild(userNameElement);
+
+      // Button
+      const addButton = document.createElement("button");
+      addButton.textContent = "Add";
+      addButton.classList.add("btn", "btn-success", "mx-2");
+      addButton.setAttribute("data-user-id", user.id);
+      addButton.setAttribute("data-group-id", groupID);
+      addButton.addEventListener("click", (event) => addUsersToGroup(event));
+      li.appendChild(addButton);
+
+      userList.appendChild(li);
+    }
+  });
+
+  // Show the modal
+  const userModal = new bootstrap.Modal(document.getElementById("userModal"));
+  userModal.show();
+}
+
+async function addUsersToGroup(event) {
+  const buttonEle = event.target;
+  const groupID = buttonEle.dataset.groupId;
+  const userId = buttonEle.dataset.userId;
+  console.log(groupID, userId);
+  try {
+    const res = await axios.post(
+      baseURL + `/group/${groupID}/addUser`,
+      { userIds: userId },
+      {
+        headers: { Authorization: token },
+      }
+    );
+    if (res.data.success) renderGroupUserList(groupID);
+  } catch (err) {
+    window.alert("Cant add user");
   }
 }
 // Utils
@@ -187,7 +348,7 @@ async function getChatsFromDb(groupID) {
       headers: { Authorization: token },
     });
     let chats = res.data.chats;
-    console.log(res.data.success, chats, chats.length);
+    // console.log(res.data.success, chats, chats.length);
 
     chats.forEach((chat) => {
       // console.log(
@@ -229,21 +390,24 @@ async function getUserFromDb() {
     // console.log(res.data.success, chats, chats.length);
 
     users.forEach((user) => {
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.name = "users";
-      checkbox.value = user.id;
-      checkbox.id = `user_${user.id}`;
+      availableUser.push(user);
+      if (user.id !== userID) {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = "users";
+        checkbox.value = user.id;
+        checkbox.id = `user_${user.id}`;
 
-      const label = document.createElement("label");
-      label.htmlFor = `user_${user.id}`;
-      label.appendChild(document.createTextNode(user.name));
+        const label = document.createElement("label");
+        label.htmlFor = `user_${user.id}`;
+        label.appendChild(document.createTextNode(user.name));
 
-      const div = document.createElement("div");
-      div.appendChild(checkbox);
-      div.appendChild(label);
+        const div = document.createElement("div");
+        div.appendChild(checkbox);
+        div.appendChild(label);
 
-      userList.appendChild(div);
+        userList.appendChild(div);
+      }
     });
   } catch (err) {
     console.log(err);

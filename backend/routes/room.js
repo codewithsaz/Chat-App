@@ -6,6 +6,11 @@ const roomController = require("../controllers/room");
 const authenticator = require("../middlewares/authenticator");
 
 router.get("/group/get", authenticator.authenticate, roomController.getRooms);
+router.get(
+  "/group/:groupId/users",
+  authenticator.authenticate,
+  roomController.getUsersInAGroup
+);
 
 router.post(
   "/group/add",
@@ -14,15 +19,21 @@ router.post(
 );
 
 router.post(
-  "/group/addUser",
+  "/group/:roomId/addUser",
   authenticator.authenticate,
   roomController.addUserToRoom
 );
 
 router.delete(
-  "/group/deleteUser",
+  "/group/:roomId/deleteUser/:userIds",
   authenticator.authenticate,
   roomController.deleteUserFromRoom
+);
+
+router.get(
+  "/group/:roomId/makeAdmin/:userIds",
+  authenticator.authenticate,
+  roomController.updateUserToAdmin
 );
 
 module.exports = router;

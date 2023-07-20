@@ -3,12 +3,12 @@ const ChatDB = require("../models/Chats");
 exports.addChatToDB = async (req, res) => {
   const message = req.body.message;
   const roomID = req.body.roomID;
-  // console.log(message, req.user);
+  console.log(message, roomID);
   try {
     await req.user.createChatDb({
       name: req.user.name,
       message: message,
-      RoomId: roomID,
+      roomId: roomID,
     });
     res.status(200).json({
       succes: true,

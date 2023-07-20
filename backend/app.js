@@ -27,17 +27,17 @@ app.use(userRoutes);
 app.use(roomRoutes);
 app.use(chatRoutes);
 
-User.belongsToMany(Room, { through: "UserRoom" });
-Room.belongsToMany(User, { through: "UserRoom" });
+User.belongsToMany(Room, { through: "userroom" });
+Room.belongsToMany(User, { through: "userroom" });
+
+UserRoom.belongsTo(User);
+UserRoom.belongsTo(Room);
 
 Room.hasMany(Chat);
 Chat.belongsTo(Room);
 
 User.hasMany(Chat);
 Chat.belongsTo(User);
-
-UserRoom.belongsTo(User);
-UserRoom.belongsTo(Room);
 
 sequelize
   // .sync()

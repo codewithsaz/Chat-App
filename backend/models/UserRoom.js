@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../util/database");
 
-const UserRoom = sequelize.define("UserRoom", {
+const UserRoom = sequelize.define("userroom", {
   admin: {
     type: Sequelize.BOOLEAN,
     allowNull: false,

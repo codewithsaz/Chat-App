@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 // const User = require("./models/User");
 
 const sequelize = require("../util/database");
-const Room = sequelize.define("Room", {
+const Room = sequelize.define("rooms", {
   id: {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4,

@@ -65,15 +65,15 @@
           <!-- <span id="no-chats-selected">No chats selected</span> -->
           <header class="msger-header">
             <div class="msger-header-title">
-              <img
+              <!-- <img
               class="people-group-info-img"
               src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=749&q=80"
               alt="people-group"
-              /></i> Sharpner Backend
+              /></i> Sharpner Backend -->
             </div>
-            <div class="msger-header-options">
+            <!-- <div class="msger-header-options">
               <span><i class="fa-solid fa-user-plus"></i></span>
-            </div>
+            </div> -->
           </header>
           
           <main class="msger-chat">
@@ -128,6 +128,52 @@
         </form>
       </section>
     </div>
+    <div id="group-info-details" class="container d-flex flex-column w-75 gap-3 py-5 group-detailed-info" style="visibility: hidden;">
+      <div id="group-icon" class="group-icon d-flex justify-content-center">
+        <!-- <img
+        class=".img-fluid. w-75 rounded-4 object-fit-cover"
+        src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+        alt="people-group"
+        /> -->
+      </div>
+      <div id="group-name" class="group-name d-flex justify-content-center"></div>
+      <div class="group-user-list overflow-y-scroll">
+        Group Members:
+        <ul id="group-user-list-ul" class="list-group p-0 m-0">
+          <!-- <li class="d-flex justify-content-between align-items-center p-1 ">
+            <div class="user-name">Demo 1</div>
+            <div class="user-actions">
+              <button class="btn btn-sm btn-primary">Admin</button>
+              <button class="btn btn-sm btn-warning">Delete</button>
+            </div>
+          </li>      -->
+          <!--<li class="d-flex justify-content-between align-items-center p-1 ">
+            <div class="user-name">Demo 1</div>
+            <div class="user-actions">
+              <button class="btn btn-sm btn-primary">Admin</button>
+              <button class="btn btn-sm btn-warning">Delete</button>
+            </div>
+          </li>     
+          <li class="d-flex justify-content-between align-items-center p-1 ">
+            <div class="user-name">Demo 1</div>. 
+            <div class="user-actions">
+              <button class="btn btn-sm btn-primary">Admin</button>
+              <button class="btn btn-sm btn-warning">Delete</button>
+            </div>
+          </li>     
+          <li class="d-flex justify-content-between align-items-center p-1 ">
+            <div class="user-name">Demo 1</div>
+            <div class="user-actions">
+              <button class="btn btn-sm btn-primary">Admin</button>
+              <button class="btn btn-sm btn-warning">Delete</button>
+            </div>
+          </li>      -->
+          
+        </ul>
+      </div>
+    </div>
+
+
       
     <div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -154,6 +200,25 @@
               </div>
               <button type="submit" class="btn btn-primary">Create</button>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="userModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Available Users</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ul id="userListAddGroup" class="list-group">
+              <!-- The list of users will be added here dynamically -->
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

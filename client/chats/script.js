@@ -1,4 +1,5 @@
-const baseURL = "http://43.204.35.216";
+// const baseURL = "http://43.204.35.216";
+const baseURL = "http://localhost:4000";
 let token = localStorage.getItem("token");
 userCred = JSON.parse(localStorage.getItem("Harmonious"));
 let userID = userCred.id;
@@ -85,8 +86,12 @@ function appendMessage(groupID, name, img, side, time, text) {
   // console.log(msgerChat);
   const grpID = msgerForm.dataset.groupId;
   console.log(grpID, groupID);
-  if (grpID !== groupID) {
-  }
+  // const content = `<div class="msg-text">${text}</div>`;
+  const content = `<div class="msg-text">
+  <img src="https://images.unsplash.com/photo-1689799980599-60c7b1846ffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=765&q=80" alt="" style="width: 150px; border-radius: 10px;">
+  
+</div>`;
+
   const msgHTML = `
     <div class="msg ${side}-msg">
       <div class="msg-img" style="background-image: url(${img})"></div>
@@ -97,7 +102,7 @@ function appendMessage(groupID, name, img, side, time, text) {
           <div class="msg-info-time">${time}</div>
         </div>
 
-        <div class="msg-text">${text}</div>
+        ${content}
       </div>
     </div>
   `;
@@ -161,8 +166,6 @@ async function renderGroupUserList(groupID) {
       if (user.user.id !== userID) {
         if (!user.admin) {
           userAction.append(adminBtn, deleteUserBtn);
-        } else {
-          userAction.append(deleteUserBtn);
         }
 
         // userAction.appendChild(adminBtn, deleteUserBtn);

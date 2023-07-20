@@ -1,5 +1,5 @@
-// const baseURL = "http://65.2.29.156:4000";
-const baseURL = "http://localhost:4000";
+const baseURL = "http://43.204.35.216";
+// const baseURL = "http://localhost:4000";
 
 const signUpButton = document.getElementById("signUp");
 const signInButton = document.getElementById("signIn");

@@ -95,7 +95,7 @@ function appendMessage(groupID, name, img, side, time, msg, type) {
     content = `<div class="msg-text">${msg}</div>`;
   } else if (type == "image") {
     content = `<div class="msg-text">
-    <img src=${msg} alt="image" style="width: 150px; border-radius: 10px;">
+    <img src=${msg} alt="image" style="max-width: 270px; max-height: 270px; border-radius: 10px;">
   </div>`;
   } else if (type == "video") {
     content = `<div class="msg-text"><video width="220px" controls>
@@ -323,8 +323,9 @@ async function sendMsgToDB(event) {
   const msgText = msgerInputText.value;
   const msgFile = msgerInputFile.files[0];
 
-  if (!msgText) return;
-  else {
+  console.log("msgFile", msgFile);
+
+  if (msgText) {
     // const date =
     const messageObj = {
       name: userName,
@@ -342,7 +343,7 @@ async function sendMsgToDB(event) {
           headers: { Authorization: token },
         }
       );
-      sendMsgRT(messageObj, room);
+      sendMsgRT(messageObj, groupID);
       // console.log("msg REspoinse", res);
       appendMessage(
         groupID,
@@ -360,39 +361,54 @@ async function sendMsgToDB(event) {
     }
   }
 
-  // if (!msgFile) return;
-  // else {
-  //   const formData = new FormData();
-  //   formData.append("name", userName);
-  //   formData.append("message", file);
-  //   formData.append("roomID", groupID);
-  //   try {
-  //     const res = await axios.post(
-  //       baseURL + "/chat/upload",
+  if (!msgFile) {
+    console.log("Not a file");
+    return;
+  } else {
+    const formData = new FormData();
+    formData.append("name", userName);
+    formData.append("message", msgFile);
+    formData.append("roomID", groupID);
+    formData.append("date", formatDate(new Date()));
+    formData.append("type", "image");
+    console.log("Called sendFile FormData", formData);
+    try {
+      const res = await axios.post(
+        baseURL + "/chat/upload",
 
-  //       messageObj,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Authorization: token,
-  //         },
-  //       }
-  //     );
-  //     // sendMsgRT(messageObj, room);
-  //     appendMessage(
-  //       groupID,
-  //       res.data.chat.name,
-  //       PERSON_IMG,
-  //       "right",
-  //       formatDate(new Date()),
-  //       msgText
-  //     );
-  //     msgerInputFile.value = "";
-  //   } catch (err) {
-  //     console.log(err);
-  //     window.alert("Database Error");
-  //   }
-  // }
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: token,
+          },
+        }
+      );
+
+      console.log(res.data);
+      const imageObj = {
+        name: res.data.chat.name,
+        message: res.data.chat.message,
+        date: res.data.chat.date,
+        type: res.data.chat.type,
+        roomID: groupID,
+      };
+      sendMsgRT(imageObj, groupID);
+      appendMessage(
+        groupID,
+        res.data.chat.name,
+        PERSON_IMG,
+        "right",
+        res.data.chat.date,
+        res.data.chat.message,
+        res.data.chat.type
+      );
+      msgerInputFile.value = "";
+    } catch (err) {
+      console.log(err);
+      window.alert("Database Error");
+    }
+  }
 }
 
 // setInterval(getChatsFromDb, 5000);
@@ -529,6 +545,10 @@ form.addEventListener("submit", async (event) => {
 async function sendMsgRT(message, room) {
   await socket.emit("send_message", { message, room });
 }
+
+// async function sendImageRT(message, room) {
+//   await socket.emit("send_image", { message, room });
+// }
 
 socket.on("receive_message", (data) => {
   // setMessageReceived(data.message);

@@ -9,6 +9,7 @@ const sequelize = require("./util/database");
 const userRoutes = require("./routes/user");
 const chatRoutes = require("./routes/chat");
 const roomRoutes = require("./routes/room");
+const fileRoutes = require("./routes/file");
 
 const User = require("./models/Users");
 const Chat = require("./models/Chats");
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(userRoutes);
 app.use(roomRoutes);
 app.use(chatRoutes);
+app.use(fileRoutes);
 
 User.belongsToMany(Room, { through: "userroom" });
 Room.belongsToMany(User, { through: "userroom" });

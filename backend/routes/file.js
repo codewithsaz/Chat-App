@@ -1,19 +1,23 @@
 const express = require("express");
-
 const router = express.Router();
 
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = require("../helpers/upload.helper");
+const uploadController = require("../controllers/upload");
+const authenticator = require("../middlewares/authenticator");
 
-router.post("/upload", upload.single("message"), (req, res) => {
-  const name = req.body.name;
-  const roomID = req.body.roomID;
-  const file = req.file;
+router.post(
+  "/chat/upload",
+  authenticator.authenticate,
+  upload.single("message"),
+  uploadController.uploadSingle
+);
+// router.post(
+//   "/upload-multiple",
+//   upload.array("files", 5),
+//   uploadController.uploadMultiple
+// );
 
-  // Process the name, roomID, and file as needed (e.g., save to database, send to other clients, etc.)
-  // Your logic goes here...
-
-  res.json({ message: "Message and File uploaded successfully!" });
-});
+// /* ------------------------ upload and error handling ----------------------- */
+// router.post("/upload-single-v2", uploadController.uploadSingleV2);
 
 module.exports = router;

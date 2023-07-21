@@ -2,18 +2,22 @@ const ChatDB = require("../models/Chats");
 
 exports.addChatToDB = async (req, res) => {
   const message = req.body.message;
+  const date = req.body.date;
+  const type = req.body.type;
   const roomID = req.body.roomID;
-  console.log(message, roomID);
+  console.log(message, roomID, type, date);
   try {
     await req.user.createChatDb({
       name: req.user.name,
       message: message,
+      date: date,
+      type: type,
       roomId: roomID,
     });
     res.status(200).json({
       succes: true,
       message: "Message Added to Database",
-      chat: { name: req.user.name, message: message },
+      chat: { name: req.user.name, message: message, date: date, type: type },
     });
   } catch (err) {
     console.log(err);

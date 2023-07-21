@@ -17,6 +17,14 @@ const ChatDB = sequelize.define("chatDb", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  type: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  date: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = ChatDB;

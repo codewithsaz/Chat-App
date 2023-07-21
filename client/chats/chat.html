@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="main container">
+    <div class="main container-fluid">
       <section class="people">
         <div class="user-info">
           <img
@@ -36,7 +36,12 @@
             <!-- <a href="#" data-toggle="modal" data-target="#addNewGroupModal"
               ><i class="fa-solid fa-plus fa-bounce"></i></i
             ></a> -->
-            <button type="button" class="btn btn-primary rounded-5" data-toggle="modal" data-target="#createGroupModal">
+            <button
+              type="button"
+              class="btn btn-primary rounded-5"
+              data-toggle="modal"
+              data-target="#createGroupModal"
+            >
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
@@ -51,19 +56,16 @@
               alt="people-group"
               />
               <div class="people-group-info-text">
-                <div class="people-group-info-title">Sharpner Backend</div>
-               
+                <div class="people-group-info-title">Sharpner Backend</div>               
               </div>
             </div>
           </div> -->
-          
         </div>
       </section>
       <div class="msger-wrapper">
         <section class="msger">
-          
           <!-- <span id="no-chats-selected">No chats selected</span> -->
-          <header class="msger-header">
+          <header class="msger-header" style="display: none">
             <div class="msger-header-title">
               <!-- <img
               class="people-group-info-img"
@@ -75,9 +77,9 @@
               <span><i class="fa-solid fa-user-plus"></i></span>
             </div> -->
           </header>
-          
+
           <main class="msger-chat">
-          <!-- <div class="msg left-msg">
+            <!-- <div class="msg left-msg">
             <div
             class="msg-img"
             style="
@@ -116,38 +118,57 @@
               </div>
             </div>
           </div> -->
-        </main>
-        
-        <form class="msger-inputarea">
-          <input
-          type="text"
-          class="msger-input"
-          placeholder="Enter your message..."
-          />
-          <button type="submit" class="msger-send-btn">Send</button>
-        </form>
-      </section>
-    </div>
-    <div id="group-info-details" class="container d-flex flex-column w-75 gap-3 py-5 group-detailed-info" style="visibility: hidden;">
-      <div id="group-icon" class="group-icon d-flex justify-content-center">
-        <!-- <img
-        class=".img-fluid. w-75 rounded-4 object-fit-cover"
-        src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-        alt="people-group"
-        /> -->
+          </main>
+
+          <form class="msger-inputarea" style="display: none">
+            <input
+              type="text"
+              class="msger-input"
+              placeholder="Enter your message..."
+            />
+            <label for="fileInput" class="file-upload-button">
+              <i class="fa-solid fa-upload"></i>
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              class="msger-file-input"
+              accept=".jpg,.jpeg,.mp4"
+              max="10485760"
+            />
+            <button type="submit" class="msger-send-btn">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </section>
       </div>
-      <div id="group-name" class="group-name d-flex justify-content-center"></div>
-      <div class="group-user-list overflow-y-scroll">
-        Group Members:
-        <ul id="group-user-list-ul" class="list-group p-0 m-0">
-          <!-- <li class="d-flex justify-content-between align-items-center p-1 ">
-            <div class="user-name">Demo 1</div>
-            <div class="user-actions">
-              <button class="btn btn-sm btn-primary">Admin</button>
-              <button class="btn btn-sm btn-warning">Delete</button>
-            </div>
-          </li>      -->
-          <!--<li class="d-flex justify-content-between align-items-center p-1 ">
+      <div
+        id="group-info-details"
+        class="d-flex flex-column w-75 gap-3 py-5 group-detailed-info"
+        style="visibility: hidden"
+      >
+        <div id="group-icon" class="group-icon d-flex justify-content-center">
+          <!-- <img
+            class="group-icon-img"
+            src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            alt="people-group"
+          /> -->
+        </div>
+        <div
+          id="group-name"
+          class="group-name d-flex justify-content-center"
+        ></div>
+        <div class="group-user-list overflow-y-scroll">
+          Group Members:
+          <ul id="group-user-list-ul" class="list-group p-0 m-0">
+            <li class="d-flex justify-content-between align-items-center p-1">
+              <div class="user-name">Demo 1</div>
+              <div class="user-actions">
+                <button class="btn btn-sm btn-primary">Admin</button>
+                <button class="btn btn-sm btn-warning">Delete</button>
+              </div>
+            </li>
+            <!--<li class="d-flex justify-content-between align-items-center p-1 ">
             <div class="user-name">Demo 1</div>
             <div class="user-actions">
               <button class="btn btn-sm btn-primary">Admin</button>
@@ -168,19 +189,29 @@
               <button class="btn btn-sm btn-warning">Delete</button>
             </div>
           </li>      -->
-          
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
 
-
-      
-    <div class="modal fade" id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="createGroupModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="createGroupModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="createGroupModalLabel">Create Group</h5>
-            <button type="button" class="close btn btn-warning" data-dismiss="modal" aria-label="Close">
+            <button
+              type="button"
+              class="close btn btn-warning"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
             </button>
           </div>
@@ -188,11 +219,23 @@
             <form id="createGroupForm">
               <div class="form-group">
                 <label for="groupName">Group Name</label>
-                <input type="text" class="form-control" id="groupName" name="groupName" required>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="groupName"
+                  name="groupName"
+                  required
+                />
               </div>
               <div class="form-group">
                 <label for="imageUrl">Image URL</label>
-                <input type="text" class="form-control" id="imageUrl" name="imageUrl" required>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="imageUrl"
+                  name="imageUrl"
+                  required
+                />
               </div>
               <div class="form-group">
                 <label for="users">Users</label>
@@ -210,7 +253,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Available Users</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <ul id="userListAddGroup" class="list-group">
@@ -218,11 +266,18 @@
             </ul>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
     </div>
+
     <script
       src="https://cdn.socket.io/4.6.0/socket.io.min.js"
       integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"

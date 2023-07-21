@@ -12,15 +12,17 @@ const socket = io.connect("http://localhost:4040");
 let room = "";
 
 const msgerForm = get(".msger-inputarea");
-const msgerInput = get(".msger-input");
+const msgerInputText = get(".msger-input");
+const msgerInputFile = get(".msger-file-input");
 const msgerChat = get(".msger-chat");
 const msgerHeader = get(".msger-header");
 const msgerHeaderTitle = get(".msger-header-title");
 // const msgerChatWindow = get(".msger-chat");
 const grpList = get(".people-groups");
 
-const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
-const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
+// const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
+const PERSON_IMG =
+  "https://images.unsplash.com/photo-1688378911966-ff12184b2680?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80";
 window.addEventListener("DOMContentLoaded", () => {
   getUserFromDb();
   getGroupsFromDb();
@@ -60,7 +62,7 @@ function renderChatWindow(grpName, grpImg, grpID) {
     /> ${grpName}
   
   `;
-  console.log(grpName, grpID, grpImg);
+  // console.log(grpName, grpID, grpImg);
   const msgerHeaderOptions = document.createElement("div");
   msgerHeaderOptions.className = "msger-header-options";
   const spanOptionElement = document.createElement("span");
@@ -72,8 +74,10 @@ function renderChatWindow(grpName, grpImg, grpID) {
   msgerHeaderOptions.append(spanOptionElement);
 
   msgerChat.innerHTML = "";
+  msgerForm.style.display = "flex";
   msgerForm.setAttribute("data-group-id", grpID);
   msgerHeaderTitle.innerHTML = chatHeaderHTML;
+  msgerHeader.style.display = "flex";
   msgerHeader.innerHTML = "";
   msgerHeader.append(msgerHeaderTitle, msgerHeaderOptions);
   getChatsFromDb(grpID);
@@ -81,21 +85,29 @@ function renderChatWindow(grpName, grpImg, grpID) {
 }
 msgerForm.addEventListener("submit", (event) => sendMsgToDB(event));
 
-function appendMessage(groupID, name, img, side, time, text) {
+function appendMessage(groupID, name, img, side, time, msg, type) {
   //   Simple solution for small apps
   // console.log(msgerChat);
   const grpID = msgerForm.dataset.groupId;
-  console.log(grpID, groupID);
-  // const content = `<div class="msg-text">${text}</div>`;
-  const content = `<div class="msg-text">
-  <img src="https://images.unsplash.com/photo-1689799980599-60c7b1846ffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=765&q=80" alt="" style="width: 150px; border-radius: 10px;">
-  
-</div>`;
+  // console.log(grpID, groupID, msg, type, time);
+  let content = "";
+  if (type == "text") {
+    content = `<div class="msg-text">${msg}</div>`;
+  } else if (type == "image") {
+    content = `<div class="msg-text">
+    <img src=${msg} alt="image" style="width: 150px; border-radius: 10px;">
+  </div>`;
+  } else if (type == "video") {
+    content = `<div class="msg-text"><video width="220px" controls>
+  <source src=${msg} type="video/mp4">
+</video>  </div>`;
+    // "https://ia802704.us.archive.org/24/items/t-f_23/The%20Flash.mp4"
+  }
 
   const msgHTML = `
-    <div class="msg ${side}-msg">
-      <div class="msg-img" style="background-image: url(${img})"></div>
-
+  <div class="msg ${side}-msg">
+  
+  <div class="msg-img" style="background-image: url(${img})"></div>
       <div class="msg-bubble">
         <div class="msg-info">
           <div class="msg-info-name">${name}</div>
@@ -119,7 +131,7 @@ function renderGroupInfo(grpname, grpImg, grpID) {
   const groupName = document.getElementById("group-name");
 
   groupIcon.innerHTML = `<img
-  class=".img-fluid. w-75 rounded-4 object-fit-cover"
+  class="group-icon-img"
   src=${grpImg}
   alt="people-group"
   />`;
@@ -133,7 +145,7 @@ async function renderGroupUserList(groupID) {
     const res = await axios.get(baseURL + "/group/" + groupID + "/users", {
       headers: { Authorization: token },
     });
-    console.log(res.data);
+    // console.log(res.data);
     const grpuserlist = res.data;
     const grpUserListUL = document.getElementById("group-user-list-ul");
     grpUserListUL.className = "list-group p-0 m-0";
@@ -173,7 +185,7 @@ async function renderGroupUserList(groupID) {
       } else {
         userlielem.append(userName);
       }
-      console.log(user.admin);
+      // console.log(user.admin);
 
       grpUserListUL.appendChild(userlielem);
     });
@@ -308,39 +320,79 @@ async function sendMsgToDB(event) {
   const form = event.target;
   const groupID = form.dataset.groupId;
 
-  const msgText = msgerInput.value;
+  const msgText = msgerInputText.value;
+  const msgFile = msgerInputFile.files[0];
+
   if (!msgText) return;
+  else {
+    // const date =
+    const messageObj = {
+      name: userName,
+      message: msgText,
+      date: formatDate(new Date()),
+      type: "text",
+      roomID: groupID,
+    };
+    try {
+      const res = await axios.post(
+        baseURL + "/chat/add",
 
-  const messageObj = {
-    name: userName,
-    message: msgText,
-    roomID: groupID,
-  };
-  try {
-    const res = await axios.post(
-      baseURL + "/chat/add",
-
-      messageObj,
-      {
-        headers: { Authorization: token },
-      }
-    );
-    sendMsgRT(messageObj, room);
-    appendMessage(
-      groupID,
-      res.data.chat.name,
-      PERSON_IMG,
-      "right",
-      formatDate(new Date()),
-      msgText
-    );
-    msgerInput.value = "";
-  } catch (err) {
-    console.log(err);
-    window.alert("Database Error");
+        messageObj,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      sendMsgRT(messageObj, room);
+      // console.log("msg REspoinse", res);
+      appendMessage(
+        groupID,
+        res.data.chat.name,
+        PERSON_IMG,
+        "right",
+        res.data.chat.date,
+        msgText,
+        "text"
+      );
+      msgerInputText.value = "";
+    } catch (err) {
+      console.log(err);
+      window.alert("Database Error");
+    }
   }
 
-  // botResponse();
+  // if (!msgFile) return;
+  // else {
+  //   const formData = new FormData();
+  //   formData.append("name", userName);
+  //   formData.append("message", file);
+  //   formData.append("roomID", groupID);
+  //   try {
+  //     const res = await axios.post(
+  //       baseURL + "/chat/upload",
+
+  //       messageObj,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: token,
+  //         },
+  //       }
+  //     );
+  //     // sendMsgRT(messageObj, room);
+  //     appendMessage(
+  //       groupID,
+  //       res.data.chat.name,
+  //       PERSON_IMG,
+  //       "right",
+  //       formatDate(new Date()),
+  //       msgText
+  //     );
+  //     msgerInputFile.value = "";
+  //   } catch (err) {
+  //     console.log(err);
+  //     window.alert("Database Error");
+  //   }
+  // }
 }
 
 // setInterval(getChatsFromDb, 5000);
@@ -364,8 +416,9 @@ async function getChatsFromDb(groupID) {
           chat.name,
           PERSON_IMG,
           "right",
-          formatDate(new Date()),
-          chat.message
+          chat.date,
+          chat.message,
+          chat.type
         );
       else
         appendMessage(
@@ -373,8 +426,9 @@ async function getChatsFromDb(groupID) {
           chat.name,
           PERSON_IMG,
           "left",
-          formatDate(new Date()),
-          chat.message
+          chat.date,
+          chat.message,
+          chat.type
         );
     });
   } catch (err) {
@@ -388,7 +442,7 @@ async function getUserFromDb() {
     const res = await axios.get(baseURL + "/user/all", {
       headers: { Authorization: token },
     });
-    console.log(res.data);
+    // console.log(res.data);
     let users = res.data.users;
     // console.log(res.data.success, chats, chats.length);
 
@@ -483,8 +537,9 @@ socket.on("receive_message", (data) => {
     data.message.name,
     PERSON_IMG,
     "left",
-    formatDate(new Date()),
-    data.message.message
+    data.message.date,
+    data.message.message,
+    data.message.type
   );
   console.log(data);
 });

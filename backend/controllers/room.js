@@ -6,7 +6,6 @@ exports.createRoom = async (req, res) => {
   try {
     const { groupName, imageURL, users } = req.body;
 
-    // Create the group
     const group = await Room.create({
       name: groupName,
       iconURL: imageURL,
@@ -42,26 +41,15 @@ exports.createRoom = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-// async (req, res) => {
-//   try {
-//     const { name } = req.body;
-//     const room = await Room.create({ name, iconURL, isSingle });
-//     res.status(201).json(room);
-//   } catch (error) {
-//     res.status(500).json({ error: "Failed to create room" });
-//   }
-// },
-// Get all rooms
 exports.getRooms = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming you have the user ID available in req.user
-
+    const userId = req.user.id;
     const rooms = await Room.findAll({
       include: [
         {
           model: User,
           where: { id: userId },
-          through: { attributes: [] }, // Exclude the join table attributes from the result
+          through: { attributes: [] },
         },
       ],
     });
@@ -72,27 +60,18 @@ exports.getRooms = async (req, res) => {
     res.status(500).json({ error: "Failed to retrieve rooms" });
   }
 };
-// async (req, res) => {
-//   try {
-//     const rooms = await Room.findAll();
-//     res.status(200).json({ groups: rooms });
-//   } catch (error) {
-//     res.status(500).json({ error: "Failed to retrieve rooms" });
-//   }
-// };
 
 exports.addUserToRoom = async (req, res) => {
   try {
     const { roomId } = req.params;
     const { userIds } = req.body;
-    const adminId = req.user.id; // Assuming you have the admin's user ID in req.user
+    const adminId = req.user.id;
     console.log(roomId, userIds);
     const room = await Room.findByPk(roomId);
     if (!room) {
       return res.status(404).json({ error: "Room not found" });
     }
 
-    // Check if the requester is an admin of the room
     const adminUserRoom = await UserRoom.findOne({
       where: { userId: adminId, roomId: roomId },
     });
@@ -107,7 +86,7 @@ exports.addUserToRoom = async (req, res) => {
       await UserRoom.create({
         userId: user.id,
         roomId: roomId,
-        admin: false, // New users are not admins by default
+        admin: false,
       });
 
       res.status(200).json({ message: "Users added to the room successfully" });
@@ -122,15 +101,12 @@ exports.deleteUserFromRoom = async (req, res) => {
   try {
     const { roomId, userIds } = req.params;
     console.log(roomId, userIds);
-    // const { userIds } = req.body;
-    const adminId = req.user.id; // Assuming you have the admin's user ID in req.user
+    const adminId = req.user.id;
 
     const room = await Room.findByPk(roomId);
     if (!room) {
       return res.status(404).json({ error: "Room not found" });
     }
-
-    // Check if the requester is an admin of the room
     const adminUserRoom = await UserRoom.findOne({
       where: { userId: adminId, roomId: roomId },
     });
@@ -148,13 +124,6 @@ exports.deleteUserFromRoom = async (req, res) => {
         message: "Users removed from the room successfully",
       });
     }
-
-    // Remove users from the room by deleting their UserRoom records
-    // await Promise.all(
-    //   users.map(async (user) => {
-    //     await UserRoom.destroy({ where: { UserId: user.id, RoomId: roomId } });
-    //   })
-    // );
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Failed to remove users from the room" });
@@ -164,15 +133,12 @@ exports.deleteUserFromRoom = async (req, res) => {
 exports.updateUserToAdmin = async (req, res) => {
   try {
     const { roomId, userIds } = req.params;
-    // const { userIds } = req.body;
-    const adminId = req.user.id; // Assuming you have the admin's user ID in req.user
+    const adminId = req.user.id;
 
     const room = await Room.findByPk(roomId);
     if (!room) {
       return res.status(404).json({ error: "Room not found" });
     }
-
-    // Check if the requester is an admin of the room
     const adminUserRoom = await UserRoom.findOne({
       where: { userId: adminId, roomId: roomId },
     });
@@ -192,8 +158,6 @@ exports.updateUserToAdmin = async (req, res) => {
       if (!userRoom) {
         throw new Error("No user room found");
       } else {
-        // If the user is already in the room, update their admin status to true
-
         await userRoom.update({ admin: true });
       }
       res.status(200).json({
@@ -201,26 +165,6 @@ exports.updateUserToAdmin = async (req, res) => {
         message: "Users updated to admin status in the room successfully",
       });
     }
-
-    // await Promise.all(
-    //   users.map(async (user) => {
-    //     const userRoom = await UserRoom.findOne({
-    //       where: { UserId: user.id, RoomId: roomId },
-    //     });
-
-    //     // If the user is not in the room, add them to the room as admin
-    //     if (!userRoom) {
-    //       await UserRoom.create({
-    //         UserId: user.id,
-    //         RoomId: roomId,
-    //         admin: true,
-    //       });
-    //     } else {
-    //       // If the user is already in the room, update their admin status to true
-    //       await userRoom.update({ admin: true });
-    //     }
-    //   })
-    // );
   } catch (error) {
     console.log(error);
     res
@@ -238,8 +182,8 @@ exports.getUsersInAGroup = async (req, res) => {
       where: { roomId: groupId },
       include: {
         model: User,
-        attributes: ["id", "name"], // Include only id and name attributes from
-      }, // Include the User model to fetch user details
+        attributes: ["id", "name"],
+      },
     });
 
     res.status(200).json(usersInGroup);

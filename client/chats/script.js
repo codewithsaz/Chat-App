@@ -11,18 +11,18 @@ const socket = io.connect("http://localhost:4040");
 // const socket = io();
 let room = "";
 
+const msgerWindow = get(".msger");
 const msgerForm = get(".msger-inputarea");
 const msgerInputText = get(".msger-input");
 const msgerInputFile = get(".msger-file-input");
 const msgerChat = get(".msger-chat");
 const msgerHeader = get(".msger-header");
 const msgerHeaderTitle = get(".msger-header-title");
-// const msgerChatWindow = get(".msger-chat");
 const grpList = get(".people-groups");
 
-// const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
 const PERSON_IMG =
   "https://images.unsplash.com/photo-1688378911966-ff12184b2680?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80";
+
 window.addEventListener("DOMContentLoaded", () => {
   getUserFromDb();
   getGroupsFromDb();
@@ -31,7 +31,6 @@ window.addEventListener("DOMContentLoaded", () => {
 document.getElementById("user-info-username").innerText = userName;
 
 function renderGroupList(grpName, grpImg, grpID) {
-  //   Simple solution for small apps
   const grpHTML = `<div class="people-group-info-wrapper" onclick="renderChatWindow('${grpName}', '${grpImg}', '${grpID}')">
 
   <div class="people-group-info" data-id=${grpID}>
@@ -41,14 +40,11 @@ function renderGroupList(grpName, grpImg, grpID) {
     />
     <div class="people-group-info-text">
       <div class="people-group-info-title">${grpName}</div>
-     
-    </div>
+     </div>
   </div>
 </div>
   `;
-
   grpList.insertAdjacentHTML("beforeend", grpHTML);
-  // grpList.scrollTop += 500;
 }
 
 function renderChatWindow(grpName, grpImg, grpID) {
@@ -73,6 +69,7 @@ function renderChatWindow(grpName, grpImg, grpID) {
   spanOptionElement.innerHTML = `<i class="fa-solid fa-user-plus"></i>`;
   msgerHeaderOptions.append(spanOptionElement);
 
+  msgerWindow.style.display = "flex";
   msgerChat.innerHTML = "";
   msgerForm.style.display = "flex";
   msgerForm.setAttribute("data-group-id", grpID);
@@ -136,7 +133,7 @@ function renderGroupInfo(grpname, grpImg, grpID) {
   alt="people-group"
   />`;
 
-  groupName.innerText = grpname;
+  groupName.innerHTML = `<h3>${grpname}</h3>`;
   renderGroupUserList(grpID);
 }
 
@@ -153,7 +150,7 @@ async function renderGroupUserList(groupID) {
     grpuserlist.forEach((user) => {
       const userlielem = document.createElement("li");
       userlielem.className =
-        "d-flex justify-content-between align-items-center p-1";
+        "d-flex justify-content-between align-items-center p-1 m-1 rounded bg-secondary-subtle";
 
       const userName = document.createElement("div");
       userName.innerText = user.user.name;
@@ -179,8 +176,6 @@ async function renderGroupUserList(groupID) {
         if (!user.admin) {
           userAction.append(adminBtn, deleteUserBtn);
         }
-
-        // userAction.appendChild(adminBtn, deleteUserBtn);
         userlielem.append(userName, userAction);
       } else {
         userlielem.append(userName);
@@ -290,7 +285,7 @@ async function addUsersToGroup(event) {
     window.alert("Cant add user");
   }
 }
-// Utils
+
 function get(selector, root = document) {
   return root.querySelector(selector);
 }
@@ -300,18 +295,14 @@ function formatDate(date) {
   const hours = now.getHours();
   const minutes = now.getMinutes();
 
-  // Determine if it's AM or PM
   const meridiem = hours >= 12 ? "PM" : "AM";
 
-  // Convert hours to 12-hour format
   const formattedHours = (hours % 12 === 0 ? 12 : hours % 12)
     .toString()
     .padStart(2, "0");
 
-  // Format minutes
   const formattedMinutes = minutes.toString().padStart(2, "0");
 
-  // Return the formatted time
   return `${formattedHours}:${formattedMinutes} ${meridiem}`;
 }
 
@@ -510,18 +501,11 @@ const form = document.getElementById("createGroupForm");
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  // Retrieve form values
   const groupName = document.getElementById("groupName").value;
   const imageUrl = document.getElementById("imageUrl").value;
   const selectedUsers = Array.from(form.elements.users)
     .filter((checkbox) => checkbox.checked)
     .map((checkbox) => checkbox.value);
-
-  // Do something with the form data
-  // (e.g., send an AJAX request to create the group)
-  console.log("Group Name:", groupName);
-  console.log("Image URL:", imageUrl);
-  console.log("Selected Users:", selectedUsers);
 
   const groupOBJ = {
     groupName: groupName,
@@ -546,10 +530,6 @@ async function sendMsgRT(message, room) {
   await socket.emit("send_message", { message, room });
 }
 
-// async function sendImageRT(message, room) {
-//   await socket.emit("send_image", { message, room });
-// }
-
 socket.on("receive_message", (data) => {
   // setMessageReceived(data.message);
   appendMessage(
@@ -563,5 +543,3 @@ socket.on("receive_message", (data) => {
   );
   console.log(data);
 });
-
-async function addnewGroup() {}

@@ -13,7 +13,6 @@ function generateAccessToken(id, name, isPremiumUser) {
   );
 }
 
-//adding new User
 exports.addUser = (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
@@ -85,14 +84,6 @@ exports.verifyUser = (req, res) => {
         message: "User Not Found",
       });
     });
-};
-
-exports.isPremiumUser = (req, res) => {
-  if (req.user.isPremiumUser) {
-    res.status(201).json({ isValid: true });
-  } else {
-    res.status(201).json({ isValid: false });
-  }
 };
 
 exports.getAllUser = async (req, res) => {

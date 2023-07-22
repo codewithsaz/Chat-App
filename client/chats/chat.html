@@ -27,22 +27,21 @@
     <div class="main container-fluid">
       <section class="people">
         <div class="user-info">
-          <img
-            src="https://images.unsplash.com/photo-1611903708839-31b28b003935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-            alt="User-Avatar"
-          />
-          <span id="user-info-username"></span>
+          <div class="user-info-wrapper">
+            <img
+              src="https://images.unsplash.com/photo-1611903708839-31b28b003935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+              alt="User-Avatar"
+            />
+            <h5 id="user-info-username" class="m-0"></h5>
+          </div>
           <div class="user-info-menu">
-            <!-- <a href="#" data-toggle="modal" data-target="#addNewGroupModal"
-              ><i class="fa-solid fa-plus fa-bounce"></i></i
-            ></a> -->
             <button
               type="button"
-              class="btn btn-primary rounded-5"
+              class="btn p-0 m-0"
               data-toggle="modal"
               data-target="#createGroupModal"
             >
-              <i class="fa-solid fa-plus"></i>
+              <i class="fa-solid fa-message" style="color: #ffffff"></i>
             </button>
           </div>
         </div>
@@ -63,7 +62,7 @@
         </div>
       </section>
       <div class="msger-wrapper">
-        <section class="msger">
+        <section class="msger" style="display: none">
           <!-- <span id="no-chats-selected">No chats selected</span> -->
           <header class="msger-header" style="display: none">
             <div class="msger-header-title">
@@ -156,12 +155,14 @@
         </div>
         <div
           id="group-name"
-          class="group-name d-flex justify-content-center"
+          class="group-name d-flex justify-content-center border-bottom border-5"
         ></div>
         <div class="group-user-list overflow-y-scroll">
-          Group Members:
+          <h5 class="fw-bold">Group Members:</h5>
           <ul id="group-user-list-ul" class="list-group p-0 m-0">
-            <li class="d-flex justify-content-between align-items-center p-1">
+            <li
+              class="d-flex justify-content-between align-items-center p-1 m-1"
+            >
               <div class="user-name">Demo 1</div>
               <div class="user-actions">
                 <button class="btn btn-sm btn-primary">Admin</button>
@@ -228,7 +229,7 @@
                 />
               </div>
               <div class="form-group">
-                <label for="imageUrl">Image URL</label>
+                <label for="imageUrl">Group Icon</label>
                 <input
                   type="text"
                   class="form-control"
@@ -248,31 +249,22 @@
       </div>
     </div>
 
-    <div class="modal" id="userModal">
+    <div class="modal modal-user" id="userModal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Available Users</h5>
-            <button
+            <!-- <button
               type="button"
               class="btn-close"
-              data-bs-dismiss="modal"
+              data-bs-dismiss="modal-user"
               aria-label="Close"
-            ></button>
+            ></button> -->
           </div>
           <div class="modal-body">
             <ul id="userListAddGroup" class="list-group">
               <!-- The list of users will be added here dynamically -->
             </ul>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>

@@ -9,15 +9,7 @@ router.post(
   "/chat/upload",
   authenticator.authenticate,
   upload.single("message"),
-  uploadController.uploadSingle
+  uploadController.uploadMediaToDB
 );
-// router.post(
-//   "/upload-multiple",
-//   upload.array("files", 5),
-//   uploadController.uploadMultiple
-// );
-
-// /* ------------------------ upload and error handling ----------------------- */
-// router.post("/upload-single-v2", uploadController.uploadSingleV2);
 
 module.exports = router;

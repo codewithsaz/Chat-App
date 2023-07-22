@@ -12,10 +12,4 @@ router.get("/user/all", authenticator.authenticate, userController.getAllUser);
 
 // router.post("/user/updatePassword", userController.updatePassword);
 
-// router.get(
-//   "/user/premium",
-//   authenticator.authenticate,
-//   userController.isPremiumUser
-// );
-
 module.exports = router;

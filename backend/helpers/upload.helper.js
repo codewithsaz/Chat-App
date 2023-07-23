@@ -11,7 +11,7 @@ const upload = multer({
     bucket: process.env.AWS_BUCKET,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
-      const userID = req.user.id; // Assuming userID is available in req.user
+      const userID = req.user.id;
       const fileName = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
       const folderPath = `multimedia_${userID}`; // Dynamic folder name
       cb(null, `${folderPath}/${fileName}${path.extname(file.originalname)}`);

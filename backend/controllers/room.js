@@ -24,7 +24,7 @@ exports.createRoom = async (req, res) => {
       where: { userId: req.user.id, roomId: roomId },
     });
 
-    console.log("userRoom", userRoom);
+    // console.log("userRoom", userRoom);
     if (!userRoom) {
       await UserRoom.create({
         userId: req.user.id,
@@ -66,7 +66,7 @@ exports.addUserToRoom = async (req, res) => {
     const { roomId } = req.params;
     const { userIds } = req.body;
     const adminId = req.user.id;
-    console.log(roomId, userIds);
+    // console.log(roomId, userIds);
     const room = await Room.findByPk(roomId);
     if (!room) {
       return res.status(404).json({ error: "Room not found" });
@@ -100,7 +100,7 @@ exports.addUserToRoom = async (req, res) => {
 exports.deleteUserFromRoom = async (req, res) => {
   try {
     const { roomId, userIds } = req.params;
-    console.log(roomId, userIds);
+    // console.log(roomId, userIds);
     const adminId = req.user.id;
 
     const room = await Room.findByPk(roomId);
@@ -149,7 +149,7 @@ exports.updateUserToAdmin = async (req, res) => {
     }
 
     const user = await User.findOne({ where: { id: userIds } });
-    console.log("User found : ", user, " userID : ", user.id);
+    // console.log("User found : ", user, " userID : ", user.id);
     if (user) {
       const userRoom = await UserRoom.findOne({
         where: { userId: user.id, roomId: roomId },
@@ -176,7 +176,7 @@ exports.updateUserToAdmin = async (req, res) => {
 exports.getUsersInAGroup = async (req, res) => {
   try {
     const groupId = req.params.groupId;
-    console.log(groupId);
+    // console.log(groupId);
 
     const usersInGroup = await UserRoom.findAll({
       where: { roomId: groupId },

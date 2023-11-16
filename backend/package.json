@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "start-server": "node app.js",
-    "start-dev": "nodemon -r dotenv/config app.js"
+    "dev": "nodemon -r dotenv/config app.js"
   },
   "author": "Saz Cherukat",
   "license": "ISC",
@@ -26,6 +26,7 @@
     "multer-s3": "^3.0.1",
     "mysql2": "^3.4.0",
     "node": "^20.2.0",
+    "node-cron": "^3.0.2",
     "nodemon": "^1.14.9",
     "path": "^0.12.7",
     "razorpay": "^2.8.6",

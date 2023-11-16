@@ -1,5 +1,5 @@
 const cron = require("node-cron");
-const { Sequelize, Model, DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 const sequelize = require("./util/database");
 
 const Chat = require("./models/Chats");
@@ -10,6 +10,7 @@ cron.schedule("0 0 * * *", async () => {
   try {
     const oneDayAgo = new Date();
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+    console.log(oneDayAgo);
 
     const oneDayOldChats = await Chat.findAll({
       where: {
@@ -41,4 +42,4 @@ cron.schedule("0 0 * * *", async () => {
 });
 
 // Start the cron job
-cron.start();
+// cron.start();

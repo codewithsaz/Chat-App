@@ -1,5 +1,5 @@
-const baseURL = "http://43.204.35.216";
-// const baseURL = "http://localhost:4000";
+// const baseURL = "http://43.204.35.216";
+const baseURL = "http://localhost:4000";
 let token = localStorage.getItem("token");
 userCred = JSON.parse(localStorage.getItem("Harmonious"));
 let userID = userCred.id;

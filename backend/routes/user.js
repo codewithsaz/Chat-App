@@ -7,6 +7,11 @@ const authenticator = require("../middlewares/authenticator");
 router.post("/user/signup", userController.addUser);
 
 router.post("/user/login", userController.verifyUser);
+router.get(
+  "/user/details",
+  authenticator.authenticate,
+  userController.getUserDetails
+);
 
 router.get("/user/all", authenticator.authenticate, userController.getAllUser);
 

@@ -14,7 +14,7 @@ import useUploadMediaStore from "../store/uploadMediaStore";
 import CreateCallButton from "./CallFeatureComponents/CreateCallButton";
 import { socket } from "../socket";
 
-const PersonalMessageBox = () => {
+const GroupMessageBox = () => {
   const baseURL = import.meta.env.VITE_BASE_URL;
 
   const { chatID } = useParams();
@@ -127,12 +127,9 @@ const PersonalMessageBox = () => {
       let token = localStorage.getItem("token");
 
       try {
-        const res = await axios.get(
-          baseURL + "/personal/" + chatID + "/details",
-          {
-            headers: { Authorization: token },
-          }
-        );
+        const res = await axios.get(baseURL + "/group/" + chatID + "/details", {
+          headers: { Authorization: token },
+        });
         if (res.data.success) {
           setGroupDetails(res.data.group);
         }
@@ -349,6 +346,12 @@ const PersonalMessageBox = () => {
           )}
         </ul>
         <div className="w-full flex items-end  h-max dark:border-white/10 p-2 border-t-1 gap-2 ">
+          {/* <Icon
+            icon="fluent:attach-20-regular"
+            height={30}
+            width={30}
+            className="pb-2"
+          /> */}
           <UploadButton />
           <div className="w-full flex flex-col gap-2">
             {selectedFileURL && (
@@ -386,4 +389,4 @@ const PersonalMessageBox = () => {
   );
 };
 
-export default PersonalMessageBox;
+export default GroupMessageBox;

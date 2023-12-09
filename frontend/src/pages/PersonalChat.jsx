@@ -6,6 +6,7 @@ const PersonalChat = () => {
   return (
     <div className="w-full h-full flex flex-col lg:flex-row ">
       <PersonalChatList />
+
       <Outlet />
     </div>
   );

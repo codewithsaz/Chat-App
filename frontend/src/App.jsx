@@ -4,13 +4,15 @@ import viteLogo from "/vite.svg";
 import { Input } from "@nextui-org/react";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
+import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <main className="w-full h-screen  text-foreground bg-background">
       <MainLayout />
+      <ToastContainer />
     </main>
   );
 }

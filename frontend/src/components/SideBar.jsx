@@ -10,19 +10,20 @@ import { Icon } from "@iconify/react";
 import { NavLink } from "react-router-dom";
 import ToogleThemeButton from "./ToogleThemeButton";
 import VChatlogo from "../assets/VChatlogo.png";
+import useUserStore from "../store/userStore";
+
 const SideBar = () => {
+  const { user, setUser } = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }));
   return (
     <div className=" dark:border-white/10 border-t-1 lg:border-0 w-full lg:w-20 flex lg:flex-col justify-evenly lg:justify-between items-center gap-2 py-2   px-4 dark:bg-[#111111]">
       <div
         id="navigation-elements"
         className="w-full flex lg:flex-col justify-evenly items-center lg:gap-10"
       >
-        <img
-          src={VChatlogo}
-          alt=""
-          className="h-14 w-14 hidden lg:block"
-          style={{ filter: "drop-shadow(0px 0px 20px #05f747)" }}
-        />
+        <img src={VChatlogo} alt="" className="h-14 w-14 hidden lg:block" />
 
         <NavLink to="personal">
           <Icon
@@ -48,7 +49,7 @@ const SideBar = () => {
             className="text-inherit"
           />
         </NavLink>
-        <NavLink to="voicecall">
+        <NavLink to="call">
           <Icon
             icon="carbon:phone-voice-filled"
             width={30}
@@ -63,16 +64,16 @@ const SideBar = () => {
               isBordered
               as="button"
               className="transition-transform"
-              color="secondary"
-              name="Jason Hughes"
+              color="success"
+              name={user.name}
               size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src={user.profileIconURL}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold capitalize">{user.name}</p>
+              <p className="font-semibold">{user.email}</p>
             </DropdownItem>
             <DropdownItem key="settings">Profile</DropdownItem>
             {/* <DropdownItem key="team_settings">Team Settings</DropdownItem>
@@ -80,7 +81,14 @@ const SideBar = () => {
           <DropdownItem key="system">System</DropdownItem>
           <DropdownItem key="configurations">Configurations</DropdownItem>
           <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem> */}
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem
+              key="logout"
+              color="danger"
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.reload();
+              }}
+            >
               Log Out
             </DropdownItem>
           </DropdownMenu>

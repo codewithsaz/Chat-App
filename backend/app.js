@@ -30,8 +30,8 @@ app.use(roomRoutes);
 app.use(chatRoutes);
 app.use(fileRoutes);
 
-User.belongsToMany(Room, { through: "userroom" });
-Room.belongsToMany(User, { through: "userroom" });
+User.belongsToMany(Room, { through: "userroom", as: "participants" });
+Room.belongsToMany(User, { through: "userroom", as: "participants" });
 
 UserRoom.belongsTo(User);
 UserRoom.belongsTo(Room);

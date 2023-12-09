@@ -2,15 +2,13 @@
 const User = require("../models/Users");
 // const ForgotPasswordRequest = require("../models/forgotPasswordRequest");
 const sequelize = require("../util/database");
+const { Sequelize } = require("sequelize");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 
-function generateAccessToken(id, name, isPremiumUser) {
-  return jwt.sign(
-    { userId: id, name: name, isPremiumUser: isPremiumUser },
-    process.env.SECRET_KEY
-  );
+function generateAccessToken(email, name) {
+  return jwt.sign({ email: email, name: name }, process.env.SECRET_KEY);
 }
 
 exports.addUser = (req, res) => {
@@ -51,25 +49,27 @@ exports.verifyUser = (req, res) => {
   // console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
-  User.findAll({
+  User.findOne({
     where: {
       email: email,
     },
   })
     .then((user) => {
-      // console.log(user[0]);
-      bcrypt.compare(password, user[0].password, function (err, result) {
+      // console.log(user, user.name, user.id, user.email);
+      bcrypt.compare(password, user.password, function (err, result) {
         if (result)
           res.status(200).json({
             success: true,
-            p3245uouhdosuhgf: user[0].id,
-            sdthhtxyd436: user[0].name,
+            user: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              profileIconURL: user.profileIconURL,
+            },
+            p3245uouhdosuhgf: user.id,
+            sdthhtxyd436: user.name,
             message: "Login Successfull",
-            token: generateAccessToken(
-              user[0].id,
-              user[0].name,
-              user[0].isPremiumUser
-            ),
+            token: generateAccessToken(user.email, user.name),
           });
         else
           res.status(401).json({
@@ -85,12 +85,39 @@ exports.verifyUser = (req, res) => {
       });
     });
 };
+exports.getUserDetails = async (req, res, next) => {
+  try {
+    const token = req.header("Authorization");
+    const userEmail = jwt.verify(token, process.env.SECRET_KEY).email;
+    const user = await User.findOne({ where: { email: userEmail } });
+    if (user)
+      res.status(200).json({
+        success: true,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          profileIconURL: user.profileIconURL,
+        },
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ success: false, message: "User Not Found" });
+  }
+};
 
 exports.getAllUser = async (req, res) => {
+  const currentUser = req.user;
   try {
-    const users = await User.findAll({});
-    // console.log(users);
-    res.status(201).json({ users: users });
+    const users = await User.findAll({
+      attributes: ["name", "email", "profileIconURL"],
+      where: {
+        id: {
+          [Sequelize.Op.not]: currentUser.id, // Exclude the current user by using the not operator
+        },
+      },
+    });
+    res.status(201).json({ success: true, users: users });
   } catch (err) {
     res.status(201).json({ isValid: false });
   }

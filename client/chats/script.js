@@ -511,15 +511,16 @@ form.addEventListener("submit", async (event) => {
     imageURL: imageUrl,
     users: selectedUsers,
   };
-  try {
-    const res = await axios.post(baseURL + "/group/add", groupOBJ, {
-      headers: { Authorization: token },
-    });
-    window.location.reload();
-  } catch (err) {
-    console.log(err);
-    window.alert("Database Error");
-  }
+  console.log(groupOBJ);
+  // try {
+  //   const res = await axios.post(baseURL + "/group/add", groupOBJ, {
+  //     headers: { Authorization: token },
+  //   });
+  //   window.location.reload();
+  // } catch (err) {
+  //   console.log(err);
+  //   window.alert("Database Error");
+  // }
 
   // Close the modal
   $("#createGroupModal").modal("hide");

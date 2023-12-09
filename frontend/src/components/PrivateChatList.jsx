@@ -5,10 +5,11 @@ import ChatListItem from "./ChatListItem";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import AddNewGroupButton from "./AddNewGroupButton";
+import NewPrivateChatButton from "./NewPrivateChatButton";
 // axios.defaults.withCredentials = true;
 const baseURL = "http://localhost:4000";
 
-const GroupChatList = () => {
+const PrivateChatList = () => {
   const [groups, setGroups] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
@@ -17,7 +18,7 @@ const GroupChatList = () => {
       let token = localStorage.getItem("token");
 
       try {
-        const res = await axios.get(baseURL + "/group/get", {
+        const res = await axios.get(baseURL + "/private/get", {
           headers: { Authorization: token },
         });
         setGroups(res.data.groups);
@@ -45,14 +46,14 @@ const GroupChatList = () => {
             placeholder="Search Group or Chats"
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <AddNewGroupButton />
+          <NewPrivateChatButton />
           {/* <Icon icon="bxs:message-square-add" width={50} height={50} /> */}
         </div>
       </header>
 
       <section className="w-full h-max  lg:h-full flex lg:flex-col overflow-y-auto ">
         <h1 className=" min-w-fit h-max mb-2 text-2xl font-semibold border-b-1 dark:border-white/20 hidden lg:block ">
-          Group Chats
+          Private Chats
         </h1>
         {searchInput === ""
           ? groups.map((group, index) => (
@@ -70,4 +71,4 @@ const GroupChatList = () => {
   );
 };
 
-export default GroupChatList;
+export default PrivateChatList;

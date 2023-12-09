@@ -4,8 +4,8 @@ const sequelize = require("../util/database");
 
 const ArchivedChat = sequelize.define("ArchivedChat", {
   id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
     primaryKey: true,
   },

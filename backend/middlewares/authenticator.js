@@ -6,13 +6,12 @@ const sequelize = require("../util/database");
 exports.authenticate = async (req, res, next) => {
   try {
     const token = req.header("Authorization");
-    const userId = jwt.verify(token, process.env.SECRET_KEY).userId;
-    const user = await User.findByPk(userId);
+    const userEmail = jwt.verify(token, process.env.SECRET_KEY).email;
+    const user = await User.findOne({ where: { email: userEmail } });
 
     req.user = user;
     next();
   } catch (err) {
-    console.log(err);
     return res.status(401).json({ success: false });
   }
 };

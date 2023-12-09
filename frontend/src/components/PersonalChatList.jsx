@@ -1,75 +1,37 @@
-import {
-  Autocomplete,
-  AutocompleteSection,
-  AutocompleteItem,
-} from "@nextui-org/react";
-import React from "react";
+import { Input } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import ChatListItem from "./ChatListItem";
 import { Icon } from "@iconify/react";
-
-const animals = [
-  {
-    label: "Cat",
-    value: "cat",
-    description: "The second most popular pet in the world",
-  },
-  {
-    label: "Dog",
-    value: "dog",
-    description: "The most popular pet in the world",
-  },
-  {
-    label: "Elephant",
-    value: "elephant",
-    description: "The largest land animal",
-  },
-  { label: "Lion", value: "lion", description: "The king of the jungle" },
-  { label: "Tiger", value: "tiger", description: "The largest cat species" },
-  {
-    label: "Giraffe",
-    value: "giraffe",
-    description: "The tallest land animal",
-  },
-  {
-    label: "Dolphin",
-    value: "dolphin",
-    description: "A widely distributed and diverse group of aquatic mammals",
-  },
-  {
-    label: "Penguin",
-    value: "penguin",
-    description: "A group of aquatic flightless birds",
-  },
-  {
-    label: "Zebra",
-    value: "zebra",
-    description: "A several species of African equids",
-  },
-  {
-    label: "Shark",
-    value: "shark",
-    description:
-      "A group of elasmobranch fish characterized by a cartilaginous skeleton",
-  },
-  {
-    label: "Whale",
-    value: "whale",
-    description: "Diverse group of fully aquatic placental marine mammals",
-  },
-  {
-    label: "Otter",
-    value: "otter",
-    description: "A carnivorous mammal in the subfamily Lutrinae",
-  },
-  {
-    label: "Crocodile",
-    value: "crocodile",
-    description: "A large semiaquatic reptile",
-  },
-];
+import axios from "axios";
+import AddNewGroupButton from "./AddNewGroupButton";
+import NewPersonalChatButton from "./NewPersonalChatButton";
+// axios.defaults.withCredentials = true;
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const PersonalChatList = () => {
+  const [groups, setGroups] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    async function fetchGroups() {
+      let token = localStorage.getItem("token");
+      console.log(token);
+      try {
+        const res = await axios.get(baseURL + "/personal/get", {
+          headers: { Authorization: token },
+        });
+        setGroups(res.data.groups);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchGroups();
+  }, []);
+  const filteredGroups = groups.filter((group) =>
+    group.name.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
   return (
     <div className="w-full lg:max-w-sm h-max flex flex-col lg:h-full  dark:border-white/10 border-y-1 lg:border-x-1 lg:border-y-0 gap-2  dark:bg-[#111111] p-2">
       <header className="w-full h-max flex lg:flex-col justify-between items-center lg:items-start gap-2">
@@ -78,87 +40,32 @@ const PersonalChatList = () => {
           id="search-box"
           className="lg:w-full max-w-xl flex items-center gap-2 "
         >
-          <Autocomplete size="sm" label="Search User or Chat">
-            {animals.map((animal) => (
-              <AutocompleteItem key={animal.value} value={animal.value}>
-                {animal.label}
-              </AutocompleteItem>
-            ))}
-          </Autocomplete>
-          <Icon icon="bxs:message-square-add" width={50} height={50} />
+          <Input
+            size="sm"
+            type="text"
+            placeholder="Search User or Chats"
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          <NewPersonalChatButton />
+          {/* <Icon icon="bxs:message-square-add" width={50} height={50} /> */}
         </div>
       </header>
 
       <section className="w-full h-max  lg:h-full flex lg:flex-col overflow-y-auto ">
         <h1 className=" min-w-fit h-max mb-2 text-2xl font-semibold border-b-1 dark:border-white/20 hidden lg:block ">
-          Personal Chats
+          Personal Chat
         </h1>
-        <NavLink to="asdfd-asdasd-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="David asdasd as sadasdas"
-          />
-        </NavLink>
-        <NavLink to="asdfd-ghchfg-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="Kevin"
-          />
-        </NavLink>
-        <NavLink to="asdfd-asdasd-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="David"
-          />
-        </NavLink>
-        <NavLink to="asdfd-cvb453-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="Kevin"
-          />
-        </NavLink>
-        <NavLink to="asdfd-sdfg34ts-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="David"
-          />
-        </NavLink>
-        <NavLink to="asdfd-21431241-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="Kevin"
-          />
-        </NavLink>
-        <NavLink to="asdfd-asdasd-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="David"
-          />
-        </NavLink>
-        <NavLink to="asdfd-ghchfg-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="Kevin"
-          />
-        </NavLink>
-        <NavLink to="asdfd-asdasd-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="David"
-          />
-        </NavLink>
-        <NavLink to="asdfd-cvb453-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="Kevin"
-          />
-        </NavLink>
-        <NavLink to="asdfd-sdfg34ts-asdas">
-          <ChatListItem
-            imageURL="https://images.pexels.com/photos/8864285/pexels-photo-8864285.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            itemName="David"
-          />
-        </NavLink>
+        {searchInput === ""
+          ? groups.map((group, index) => (
+              <NavLink key={group.id} to={group.id}>
+                <ChatListItem imageURL={group.iconURL} itemName={group.name} />
+              </NavLink>
+            ))
+          : filteredGroups.map((group, index) => (
+              <NavLink key={group.id} to={group.id}>
+                <ChatListItem imageURL={group.iconURL} itemName={group.name} />
+              </NavLink>
+            ))}
       </section>
     </div>
   );
